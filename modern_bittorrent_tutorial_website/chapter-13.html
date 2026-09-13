@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The download function obtains peers, opens one output file, creates shared piece state, limits the number of simultaneous peer connections, and resolves when all blocks have arrived. A…">
+  <meta name="theme-color" content="#087ea4">
+  <title>13. Connect to peers, request blocks, and write the file · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-13.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link active" href="chapter-13.html" aria-current="page"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part III · Downloading data</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">13</span><h1>13. Connect to peers, request blocks, and write the file</h1></div>
+      <p class="article-lead">The download function obtains peers, opens one output file, creates shared piece state, limits the number of simultaneous peer connections, and resolves when all blocks have arrived. A…</p>
+    </header>
+          <div class="article-content"><h2 id="13-1-top-level-download-state">13.1 Top-level download state</h2>
+<p>The download function obtains peers, opens one output file, creates shared piece state, limits the number of simultaneous peer connections, and resolves when all blocks have arrived. A finally block always destroys sockets and closes the file descriptor.</p>
+<p><strong>State shared by all connections</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="k">export</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">download</span><span class="p">(</span><span class="nx">torrent</span><span class="p">,</span><span class="w"> </span><span class="nx">outputPath</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">peers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">getPeers</span><span class="p">(</span><span class="nx">torrent</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">peers</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;The tracker returned no peers.&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">pieces</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Pieces</span><span class="p">(</span><span class="nx">torrent</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">fileDescriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">openSync</span><span class="p">(</span><span class="nx">outputPath</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">sockets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Set</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">finished</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Connect to up to 30 peers and wait for completion...</span>
+<span class="p">}</span></code></pre></div>
+<h2 id="13-2-pre-size-the-output-file">13.2 Pre-size the output file</h2>
+<p><strong>Reserve the expected file length when safely representable</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">totalSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">totalSizeBigInt</span><span class="p">(</span><span class="nx">torrent</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">totalSize</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nb">BigInt</span><span class="p">(</span><span class="nb">Number</span><span class="p">.</span><span class="nx">MAX_SAFE_INTEGER</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">fs</span><span class="p">.</span><span class="nx">ftruncateSync</span><span class="p">(</span><span class="nx">fileDescriptor</span><span class="p">,</span><span class="w"> </span><span class="nb">Number</span><span class="p">(</span><span class="nx">totalSize</span><span class="p">));</span>
+<span class="p">}</span></code></pre></div>
+<p>Pre-sizing is not required for positional writes, but it makes the intended output size visible immediately. fs APIs use Number offsets in this simple build, so the program avoids converting impossible-to-represent giant values.</p>
+<h2 id="13-3-open-a-peer-connection">13.3 Open a peer connection</h2>
+<p><strong>One socket, one queue, one outstanding block</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">net</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">({</span><span class="w"> </span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="nx">peer</span><span class="p">.</span><span class="nx">ip</span><span class="p">,</span><span class="w"> </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="nx">peer</span><span class="p">.</span><span class="nx">port</span><span class="w"> </span><span class="p">});</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Queue</span><span class="p">(</span><span class="nx">torrent</span><span class="p">);</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">inFlight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">connectionError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="mf">30</span><span class="nx">_000</span><span class="p">);</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connect&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">socket</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">buildHandshake</span><span class="p">(</span><span class="nx">torrent</span><span class="p">));</span>
+<span class="p">});</span></code></pre></div>
+<p>inFlight remembers the exact request currently assigned to this peer. Limiting each peer to one outstanding request makes the state easy to understand. Real clients pipeline many requests for speed.</p>
+<h2 id="13-4-handle-timeout-error-and-close">13.4 Handle timeout, error, and close</h2>
+<p><strong>Return abandoned work to the shared pool</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">socket</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Peer connection timed out.&#39;</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">connectionError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">error</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">sockets</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="nx">socket</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">inFlight</span><span class="p">)</span><span class="w"> </span><span class="nx">pieces</span><span class="p">.</span><span class="nx">markFailed</span><span class="p">(</span><span class="nx">inFlight</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">peerFinished</span><span class="p">(</span><span class="nx">connectionError</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+<h2 id="13-5-dispatch-incoming-messages">13.5 Dispatch incoming messages</h2>
+<p><strong>Only the messages needed for downloading</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>switch (parsed.id) {
+  case 0:
+    queue.choked = true;
+    break;
+  case 1:
+    queue.choked = false;
+    requestNextBlock();
+    break;
+  case 4:
+    queue.enqueuePiece(parsed.payload.readUInt32BE(0));
+    requestNextBlock();
+    break;
+  case 5:
+    addBitfieldToQueue(parsed.payload, torrent, queue);
+    requestNextBlock();
+    break;
+  case 7:
+    handlePiece(parsed.payload);
+    break;
+  default:
+    break;
+}</code></pre></div>
+<p>Unknown or unused message IDs are ignored in this small client. A production implementation would apply stricter extension negotiation and logging.</p>
+<h2 id="13-6-request-the-next-needed-block">13.6 Request the next needed block</h2>
+<p><strong>Fast peers naturally ask again sooner</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">function</span><span class="w"> </span><span class="nx">requestNextBlock</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">queue</span><span class="p">.</span><span class="nx">choked</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">inFlight</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">isFinished</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">queue</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">pieceBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">queue</span><span class="p">.</span><span class="nx">dequeue</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">pieces</span><span class="p">.</span><span class="nx">needed</span><span class="p">(</span><span class="nx">pieceBlock</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">pieces</span><span class="p">.</span><span class="nx">markRequested</span><span class="p">(</span><span class="nx">pieceBlock</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">inFlight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pieceBlock</span><span class="p">;</span>
+<span class="w">      </span><span class="nx">socket</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">buildRequest</span><span class="p">(</span><span class="nx">pieceBlock</span><span class="p">));</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>A queue item might already have been claimed by another connection since it was enqueued. pieces.needed checks the shared state immediately before sending. markRequested happens before socket.write so two synchronous callers cannot claim the same job in between those operations.</p>
+<h2 id="13-7-validate-the-piece-response">13.7 Validate the piece response</h2>
+<p><strong>Do not write unexpected data</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">matchesRequest</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">pieceResponse</span><span class="p">.</span><span class="nx">index</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">inFlight</span><span class="p">.</span><span class="nx">index</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">  </span><span class="nx">pieceResponse</span><span class="p">.</span><span class="nx">begin</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">inFlight</span><span class="p">.</span><span class="nx">begin</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">  </span><span class="nx">pieceResponse</span><span class="p">.</span><span class="nx">block</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">inFlight</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">matchesRequest</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">socket</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Peer returned a block we did not request.&#39;</span><span class="p">));</span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<p>A peer controls every incoming byte. The response must match index, begin, and requested length. Closing a misbehaving connection triggers markFailed, so the block can be requested elsewhere.</p>
+<h2 id="13-8-calculate-the-absolute-file-offset">13.8 Calculate the absolute file offset</h2>
+<p><strong>Piece-relative begin -&gt; whole-file offset</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">offset</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">pieceResponse</span><span class="p">.</span><span class="nx">index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">torrent</span><span class="p">.</span><span class="nx">info</span><span class="p">[</span><span class="s1">&#39;piece length&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nx">pieceResponse</span><span class="p">.</span><span class="nx">begin</span><span class="p">;</span></code></pre></div>
+<p>pieceResponse.begin starts at zero within its piece. Multiplying the piece index by the normal piece length finds the start of the piece in the logical file; adding begin finds the block position. This still works for the short final piece because every earlier piece has normal length.</p>
+<h2 id="13-9-write-the-block">13.9 Write the block</h2>
+<p><strong>Positional write</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>fs.writeSync(
+  fileDescriptor,
+  pieceResponse.block,
+  0,
+  pieceResponse.block.length,
+  offset,
+);</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th><strong>Argument</strong></th><th><strong>Meaning</strong></th></tr></thead><tbody><tr><td>fileDescriptor</td><td>The open output file returned by fs.openSync.</td></tr><tr><td>pieceResponse.block</td><td>The received data bytes.</td></tr><tr><td>0</td><td>Start reading from byte 0 of the block Buffer.</td></tr><tr><td>block.length</td><td>Write all bytes in this block.</td></tr><tr><td>offset</td><td>Place them at this absolute output-file position.</td></tr></tbody></table></div>
+<p>Synchronous positional writes are used deliberately to avoid closing the file while asynchronous writes remain pending. The peer sockets are already asynchronous, and the code prioritises clarity over maximum throughput.</p>
+<h2 id="13-10-mark-completion-and-continue">13.10 Mark completion and continue</h2>
+<p><strong>One block completed</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>pieces.markReceived(pieceResponse);
+inFlight = null;
+process.stdout.write(`Progress: ${pieces.percentDone()}%\r`);
+
+if (pieces.isDone()) {
+  finishDownload();
+} else {
+  requestNextBlock();
+}</code></pre></div>
+<h2 id="13-11-finish-exactly-once">13.11 Finish exactly once</h2>
+<p>Several sockets may notice completion-related events close together. finishDownload checks a shared finished flag, destroys all sockets, and resolves the outer Promise once. The finally block closes the file descriptor after the Promise settles.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-12.html"><span>← Previous</span><strong>12. Pieces, blocks, queues, and failed requests</strong></a><a class="pager-card pager-next" href="chapter-14.html"><span>Next →</span><strong>14. Run the client safely</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

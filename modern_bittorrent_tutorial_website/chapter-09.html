@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Basic peer connection shape">
+  <meta name="theme-color" content="#087ea4">
+  <title>9. TCP, the peer-wire protocol, and the handshake · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-09.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link active" href="chapter-09.html" aria-current="page"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part III · Downloading data</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">9</span><h1>9. TCP, the peer-wire protocol, and the handshake</h1></div>
+      <p class="article-lead">Basic peer connection shape</p>
+    </header>
+          <div class="article-content"><h2 id="9-1-a-tcp-socket-in-node-js">9.1 A TCP socket in Node.js</h2>
+<p><strong>Basic peer connection shape</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="k">import</span><span class="w"> </span><span class="nx">net</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;node:net&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">net</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">({</span><span class="w"> </span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="nx">peer</span><span class="p">.</span><span class="nx">ip</span><span class="p">,</span><span class="w"> </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="nx">peer</span><span class="p">.</span><span class="nx">port</span><span class="w"> </span><span class="p">});</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connect&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Connected&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">bytes</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Received </span><span class="si">${</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb"> bytes`</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Closed&#39;</span><span class="p">));</span></code></pre></div>
+<p>TCP gives an ordered stream of bytes. It does not preserve the message boundaries used by the BitTorrent application protocol. Chapter 11 builds a framing function to solve that.</p>
+<h2 id="9-2-the-peer-wire-conversation">9.2 The peer-wire conversation</h2>
+<p><strong>1. </strong>Connect to the peer&#x27;s IP address and port.</p>
+<p><strong>2. </strong>Send a BitTorrent handshake containing our torrent info hash and peer ID.</p>
+<p><strong>3. </strong>Receive and validate the peer&#x27;s handshake.</p>
+<p><strong>4. </strong>Send interested.</p>
+<p><strong>5. </strong>Read choke/unchoke and piece-availability messages.</p>
+<p><strong>6. </strong>When unchoked, send request messages for blocks the peer has.</p>
+<p><strong>7. </strong>Receive piece messages and write their block bytes into the output file.</p>
+<h2 id="9-3-handshake-layout">9.3 Handshake layout</h2>
+<div class="table-wrap"><table><thead><tr><th><strong>Offset</strong></th><th><strong>Size</strong></th><th><strong>Field</strong></th><th><strong>Value</strong></th></tr></thead><tbody><tr><td>0</td><td>1</td><td>pstrlen</td><td>19</td></tr><tr><td>1</td><td>19</td><td>pstr</td><td>ASCII/UTF-8 text BitTorrent protocol</td></tr><tr><td>20</td><td>8</td><td>reserved</td><td>All zero in this basic client.</td></tr><tr><td>28</td><td>20</td><td>info_hash</td><td>Same raw hash sent to the tracker.</td></tr><tr><td>48</td><td>20</td><td>peer_id</td><td>Our process peer ID.</td></tr></tbody></table></div>
+<p>The standard v1 handshake is 68 bytes because 1 + 19 + 8 + 20 + 20 = 68.</p>
+<h2 id="9-4-build-the-handshake">9.4 Build the handshake</h2>
+<p><strong>Handshake builder</strong></p>
+<div class="code-block code-numbered"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="code-line"><span class="kd">const</span><span class="w"> </span><span class="nx">PROTOCOL_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;BitTorrent protocol&#39;</span><span class="p">;</span></span>
+<span class="code-line"><span class="kd">const</span><span class="w"> </span><span class="nx">PROTOCOL_NAME_BUFFER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="nx">PROTOCOL_NAME</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">buildHandshake</span><span class="p">(</span><span class="nx">torrent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="mf">68</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">  </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">writeUInt8</span><span class="p">(</span><span class="nx">PROTOCOL_NAME_BUFFER</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">PROTOCOL_NAME_BUFFER</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="c1">// Buffer.alloc already made reserved bytes 20-27 zero.</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">infoHash</span><span class="p">(</span><span class="nx">torrent</span><span class="p">).</span><span class="nx">copy</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="mf">28</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">getPeerId</span><span class="p">().</span><span class="nx">copy</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="mf">48</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">buffer</span><span class="p">;</span></span>
+<span class="code-line"><span class="p">}</span></span></code></pre></div>
+<h2 id="9-5-parse-the-peer-handshake">9.5 Parse the peer handshake</h2>
+<p><strong>Handshake parser</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">parseHandshake</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">49</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Handshake is too short.&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">protocolLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">readUInt8</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">expectedLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">49</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">protocolLength</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">expectedLength</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Handshake has an invalid length.&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">protocolLength</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">infoHashStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">protocolLength</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">8</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">protocol</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">infoHash</span><span class="o">:</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">infoHashStart</span><span class="p">,</span><span class="w"> </span><span class="nx">infoHashStart</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">20</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">peerId</span><span class="o">:</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">infoHashStart</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">20</span><span class="p">,</span><span class="w"> </span><span class="nx">infoHashStart</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">40</span><span class="p">),</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span></code></pre></div>
+<p>The parser does not assume pstrlen is 19 while finding offsets; it derives the positions from the first byte. The caller still checks that the protocol text equals BitTorrent protocol and that the returned info hash equals the expected torrent hash.</p>
+<h2 id="9-6-why-validate-the-info-hash">9.6 Why validate the info hash</h2>
+<p>A TCP connection can reach the wrong process, a malicious peer, or a peer that closes/reuses a port. Matching the info hash proves that the peer says it is discussing the torrent we requested. Buffer.equals compares the raw 20 bytes.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-08.html"><span>← Previous</span><strong>8. Build and parse the UDP announce exchange</strong></a><a class="pager-card pager-next" href="chapter-10.html"><span>Next →</span><strong>10. Peer message types and message builders</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

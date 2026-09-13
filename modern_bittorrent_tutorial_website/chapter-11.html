@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TCP does not promise this">
+  <meta name="theme-color" content="#087ea4">
+  <title>11. Reassemble complete messages from a TCP stream · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-11.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link active" href="chapter-11.html" aria-current="page"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part III · Downloading data</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">11</span><h1>11. Reassemble complete messages from a TCP stream</h1></div>
+      <p class="article-lead">TCP does not promise this</p>
+    </header>
+          <div class="article-content"><h2 id="11-1-the-common-beginner-mistake">11.1 The common beginner mistake</h2>
+<p><strong>TCP does not promise this</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Wrong assumption: data is exactly one complete BitTorrent message.</span>
+<span class="p">});</span></code></pre></div>
+<p>A data event can contain half a message, exactly one message, or several messages joined together. This depends on operating-system buffering, packet sizes, timing, and the network. Correct code saves incomplete bytes and repeatedly extracts complete frames.</p>
+<h2 id="11-2-handshake-length-differs-from-normal-messages">11.2 Handshake length differs from normal messages</h2>
+<p>The first incoming application message is the handshake. Its length is pstrlen + 49, so we need at least one byte before we know its total length. Later messages store a four-byte length prefix and occupy prefix + 4 bytes in total.</p>
+<h2 id="11-3-complete-framing-function">11.3 Complete framing function</h2>
+<p><strong>Persistent receive buffer</strong></p>
+<div class="code-block code-numbered"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="code-line"><span class="kd">function</span><span class="w"> </span><span class="nx">onWholeMessage</span><span class="p">(</span><span class="nx">socket</span><span class="p">,</span><span class="w"> </span><span class="nx">callback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">waitingForHandshake</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">  </span><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">received</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">([</span><span class="nx">saved</span><span class="p">,</span><span class="w"> </span><span class="nx">received</span><span class="p">]);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">waitingForHandshake</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">saved</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">          </span><span class="kd">const</span><span class="w"> </span><span class="nx">handshakeLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">readUInt8</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">49</span><span class="p">;</span></span>
+<span class="code-line"><span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">saved</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">handshakeLength</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">          </span><span class="kd">const</span><span class="w"> </span><span class="nx">handshake</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">handshakeLength</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">          </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">handshakeLength</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">          </span><span class="nx">waitingForHandshake</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span></span>
+<span class="code-line"><span class="w">          </span><span class="nx">callback</span><span class="p">(</span><span class="nx">handshake</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">          </span><span class="k">continue</span><span class="p">;</span></span>
+<span class="code-line"><span class="w">        </span><span class="p">}</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">saved</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">4</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">messageLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">readUInt32BE</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">4</span><span class="p">;</span></span>
+<span class="code-line"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">messageLength</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">          </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Peer sent an unreasonably large message.&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">        </span><span class="p">}</span></span>
+<span class="code-line"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">saved</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">messageLength</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">messageLength</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">        </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saved</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">messageLength</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">        </span><span class="nx">callback</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">      </span><span class="p">}</span></span>
+<span class="code-line"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">      </span><span class="nx">socket</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">    </span><span class="p">}</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">});</span></span>
+<span class="code-line"><span class="p">}</span></span></code></pre></div>
+<h3 id="walkthrough">Walkthrough</h3>
+<p><strong>1. </strong>saved begins empty and survives between data events because it is closed over by the event callback.</p>
+<p><strong>2. </strong>New bytes are concatenated after any previously incomplete bytes.</p>
+<p><strong>3. </strong>During the first frame, one byte reveals the handshake length.</p>
+<p><strong>4. </strong>If the full frame is not present, return and wait for another data event.</p>
+<p><strong>5. </strong>When a frame is complete, take it from the front of saved and leave the remainder for the next loop iteration.</p>
+<p><strong>6. </strong>After the handshake, read the normal four-byte length prefix.</p>
+<p><strong>7. </strong>Reject unreasonable lengths before waiting for or allocating around attacker-controlled values.</p>
+<p><strong>8. </strong>The while loop means several complete messages in one data event are all delivered to the callback.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-10.html"><span>← Previous</span><strong>10. Peer message types and message builders</strong></a><a class="pager-card pager-next" href="chapter-12.html"><span>Next →</span><strong>12. Pieces, blocks, queues, and failed requests</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

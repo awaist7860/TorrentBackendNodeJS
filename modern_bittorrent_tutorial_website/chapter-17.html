@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This is the most important reliability improvement. When all blocks for a piece arrive, read or assemble that piece, calculate SHA-1, and compare it with the corresponding 20-byte segment…">
+  <meta name="theme-color" content="#087ea4">
+  <title>17. Improvements and a production-ready roadmap · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-17.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link active" href="chapter-17.html" aria-current="page"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part IV · Confidence and next steps</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">17</span><h1>17. Improvements and a production-ready roadmap</h1></div>
+      <p class="article-lead">This is the most important reliability improvement. When all blocks for a piece arrive, read or assemble that piece, calculate SHA-1, and compare it with the corresponding 20-byte segment…</p>
+    </header>
+          <div class="article-content"><h2 id="17-1-verify-every-completed-piece">17.1 Verify every completed piece</h2>
+<p>This is the most important reliability improvement. When all blocks for a piece arrive, read or assemble that piece, calculate SHA-1, and compare it with the corresponding 20-byte segment of info.pieces. Only mark the piece accepted when the hashes match. On mismatch, clear its requested/received state and request every block again from other peers.</p>
+<p><strong>Integrity-check core</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="s1">&#39;sha1&#39;</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="nx">pieceBytes</span><span class="p">).</span><span class="nx">digest</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">expectedPieceHash</span><span class="p">(</span><span class="nx">torrent</span><span class="p">,</span><span class="w"> </span><span class="nx">pieceIndex</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">actual</span><span class="p">.</span><span class="nx">equals</span><span class="p">(</span><span class="nx">expected</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Discard/reset this piece and request it again.</span>
+<span class="p">}</span></code></pre></div>
+<h2 id="17-2-preserve-the-exact-raw-info-dictionary-bytes">17.2 Preserve the exact raw info dictionary bytes</h2>
+<p>A production metainfo parser should locate the raw info dictionary byte range and hash it directly. This handles valid-but-non-canonical or unusual files without decode/re-encode ambiguity.</p>
+<h2 id="17-3-multi-file-output">17.3 Multi-file output</h2>
+<p>Treat torrent data as one logical byte stream, but split each received block across one or more output files based on cumulative file start/end offsets. Sanitise every path component, create folders safely, and reject absolute paths or parent-directory traversal.</p>
+<h2 id="17-4-http-https-trackers-and-compact-peers">17.4 HTTP/HTTPS trackers and compact peers</h2>
+<p>Implement the standard tracker query with percent-encoded raw info_hash and peer_id values, parse a bencoded response, and support compact peer lists. Handle tracker failure reason messages and announce intervals.</p>
+<h2 id="17-5-dht-magnet-links-and-peer-exchange">17.5 DHT, magnet links, and peer exchange</h2>
+<p>DHT removes the requirement for a central tracker. Magnet links normally identify a torrent by hash and may include tracker hints. Peer exchange lets connected peers share more addresses. Each is a substantial protocol project of its own.</p>
+<h2 id="17-6-better-scheduling">17.6 Better scheduling</h2>
+<ul><li>Pipeline several outstanding requests per peer to keep network links busy.</li><li>Use rarest-first selection so uncommon pieces are copied early across the swarm.</li><li>Use end-game mode near completion, where duplicate requests may reduce waiting on one slow peer and are cancelled after the first response.</li><li>Track peer speed, failures, and usefulness; prefer responsive peers.</li><li>Periodically re-announce and add newly discovered peers.</li></ul>
+<h2 id="17-7-resume-and-persistence">17.7 Resume and persistence</h2>
+<p>Open an existing file without truncating it, verify saved pieces, and mark valid blocks/pieces complete. Save session state carefully or rebuild it by hashing the file on startup.</p>
+<h2 id="17-8-uploading-and-fairness">17.8 Uploading and fairness</h2>
+<p>A full BitTorrent client also responds to interested peers, manages choke/unchoke decisions, serves requested blocks, announces uploaded totals, and follows swarm etiquette. Download-only clients contribute nothing and may be deprioritised by peers.</p>
+<h2 id="17-9-nat-traversal-and-inbound-connectivity">17.9 NAT traversal and inbound connectivity</h2>
+<p>This guide makes outbound TCP connections only. Full clients may use port forwarding, NAT-PMP, PCP, or UPnP to accept inbound connections. These features change router state and should be implemented with explicit user consent and careful security controls.</p>
+<h2 id="17-10-gui-api-mobile-and-webrtc">17.10 GUI, API, mobile, and WebRTC</h2>
+<ul><li>A desktop GUI can call the downloader as a library and display files, peers, speed, and progress.</li><li>A local HTTP API can separate a backend download engine from web, desktop, or mobile interfaces. Add authentication and never expose it publicly by default.</li><li>A mobile client must work within platform background execution, storage, and network restrictions.</li><li>Browser peer-to-peer implementations use WebRTC and the WebTorrent ecosystem rather than raw TCP sockets available to Node.</li></ul>
+<h2 id="17-11-bittorrent-v2-and-hybrid-torrents">17.11 BitTorrent v2 and hybrid torrents</h2>
+<p>BitTorrent v2 changes metainfo structures and uses SHA-256 based Merkle trees. Hybrid torrents carry v1 and v2 data. Do not label this v1 implementation as v2-compatible merely because a file has a .torrent extension.</p>
+<h2 id="17-12-security-hardening-checklist">17.12 Security hardening checklist</h2>
+<ul><li>Cap every incoming length before buffering or allocating.</li><li>Validate indexes, offsets, block lengths, peer counts, ports, and file paths.</li><li>Verify piece hashes before accepting data.</li><li>Limit connections, queues, memory use, disk writes, and retries.</li><li>Treat tracker text, peer IDs, and torrent names as untrusted display data.</li><li>Avoid shell execution and never build commands from torrent metadata.</li><li>Use structured logs and tests for malformed packets.</li></ul></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-16.html"><span>← Previous</span><strong>16. Common errors and troubleshooting</strong></a><a class="pager-card pager-next" href="appendix-a.html"><span>Next →</span><strong>Appendix A. Complete working source code</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="This edition targets Node.js 24 LTS. Node.js 26 is the Current release line at the time of verification, but an LTS release is the safer choice for a learning project because it receives…">
+  <meta name="theme-color" content="#087ea4">
+  <title>2. Modern Node.js setup and project structure · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-02.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link active" href="chapter-02.html" aria-current="page"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part I · Foundations</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">2</span><h1>2. Modern Node.js setup and project structure</h1></div>
+      <p class="article-lead">This edition targets Node.js 24 LTS. Node.js 26 is the Current release line at the time of verification, but an LTS release is the safer choice for a learning project because it receives…</p>
+    </header>
+          <div class="article-content"><h2 id="2-1-recommended-versions">2.1 Recommended versions</h2>
+<p>This edition targets Node.js 24 LTS. Node.js 26 is the Current release line at the time of verification, but an LTS release is the safer choice for a learning project because it receives long-term maintenance. The code uses only standard Node APIs plus bencode 4.0.1.</p>
+<aside class="callout callout-info"><div class="callout-icon" aria-hidden="true">i</div><div><div class="callout-title"><strong>Version rule</strong></div><p>Use Node.js 24.x LTS for the steps in this guide. A newer Node release will probably work, but the tested target and package engines field are Node 24 or later.</p></div></aside>
+<h2 id="2-2-check-your-tools">2.2 Check your tools</h2>
+<p><strong>Run in Terminal, PowerShell, or Command Prompt</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>node<span class="w"> </span>--version
+npm<span class="w"> </span>--version</code></pre></div>
+<p>The first command should print a version beginning with v24 when you use the recommended LTS line. npm is included with Node.js. You also need a text editor such as Visual Studio Code.</p>
+<h2 id="2-3-create-the-project">2.3 Create the project</h2>
+<p><strong>Create the folders</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>mkdir<span class="w"> </span>modern-torrent-client
+<span class="nb">cd</span><span class="w"> </span>modern-torrent-client
+mkdir<span class="w"> </span>src<span class="w"> </span><span class="nb">test</span></code></pre></div>
+<p>The src folder holds application modules. The test folder holds automated checks. The project root holds package.json and index.js.</p>
+<h2 id="2-4-package-json">2.4 package.json</h2>
+<p><strong>package.json</strong></p>
+<div class="code-block code-numbered"><div class="code-toolbar"><span class="code-language">JSON</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="code-line"><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;modern-bittorrent-client-tutorial&quot;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;private&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A small BitTorrent v1 client built for learning purposes.&quot;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;module&quot;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;scripts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node index.js&quot;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">    </span><span class="nt">&quot;test&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;node --test&quot;</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">},</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;engines&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="nt">&quot;node&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;=24&quot;</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">},</span></span>
+<span class="code-line"><span class="w">  </span><span class="nt">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="nt">&quot;bencode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4.0.1&quot;</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">}</span></span>
+<span class="code-line"><span class="p">}</span></span></code></pre></div>
+<h3 id="line-by-line-explanation">Line-by-line explanation</h3>
+<div class="table-wrap"><table><thead><tr><th><strong>Property</strong></th><th><strong>Meaning</strong></th></tr></thead><tbody><tr><td>name</td><td>The package name used by npm. It does not have to match the folder exactly.</td></tr><tr><td>version</td><td>Your project version. 1.0.0 is a normal starting value.</td></tr><tr><td>private</td><td>Prevents accidental publishing to the public npm registry.</td></tr><tr><td>description</td><td>A human-readable summary.</td></tr><tr><td>type: module</td><td>Makes .js files use ECMAScript module syntax, so import and export work as written.</td></tr><tr><td>scripts.start</td><td>Lets you run npm start -- &lt;arguments&gt;, although direct node index.js is clearer while learning.</td></tr><tr><td>scripts.test</td><td>Runs Node&#x27;s built-in test runner.</td></tr><tr><td>engines.node</td><td>Documents that this guide targets Node 24 or later.</td></tr><tr><td>dependencies.bencode</td><td>Pins the bencode package to 4.0.1 for repeatable installation.</td></tr></tbody></table></div>
+<h2 id="2-5-install-the-dependency">2.5 Install the dependency</h2>
+<p><strong>Install exactly what package.json specifies</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>npm<span class="w"> </span>install</code></pre></div>
+<p>npm creates node_modules and package-lock.json. The lock file records the exact dependency tree installed on your computer. Keep package-lock.json in source control if you put the project on GitHub.</p>
+<h2 id="2-6-final-folder-layout">2.6 Final folder layout</h2>
+<p><strong>Project tree</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JSON</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="err">moder</span><span class="kc">n</span><span class="mi">-</span><span class="kc">t</span><span class="err">orre</span><span class="kc">nt</span><span class="mi">-</span><span class="err">clie</span><span class="kc">nt</span><span class="err">/</span>
+<span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">package.jso</span><span class="kc">n</span>
+<span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">package</span><span class="mi">-</span><span class="err">lock.jso</span><span class="kc">n</span>
+<span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">i</span><span class="kc">n</span><span class="err">dex.js</span>
+<span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">src/</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="kc">t</span><span class="err">orre</span><span class="kc">nt</span><span class="mi">-</span><span class="err">parser.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="kc">tra</span><span class="err">cker.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">u</span><span class="kc">t</span><span class="err">il.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">message.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">Queue.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">|</span><span class="mi">--</span><span class="w"> </span><span class="err">Pieces.js</span>
+<span class="err">|</span><span class="w">   </span><span class="err">`</span><span class="mi">--</span><span class="w"> </span><span class="err">dow</span><span class="kc">nl</span><span class="err">oad.js</span>
+<span class="err">`</span><span class="mi">--</span><span class="w"> </span><span class="kc">test</span><span class="err">/</span>
+<span class="w">    </span><span class="err">`</span><span class="mi">--</span><span class="w"> </span><span class="err">pro</span><span class="kc">t</span><span class="err">ocol.</span><span class="kc">test</span><span class="err">.js</span></code></pre></div>
+<h2 id="2-7-es-modules-in-plain-english">2.7 ES modules in plain English</h2>
+<p><strong>Modern import/export example</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="k">import</span><span class="w"> </span><span class="nx">fs</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;node:fs&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">bencode</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;bencode&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">openTorrent</span><span class="p">(</span><span class="nx">filePath</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span></code></pre></div>
+<p>import brings a value from another module into the current file. The node: prefix makes it obvious that fs is a built-in Node module. export makes a function available to other files. A relative import must include the .js extension in this project, for example ./src/download.js.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-01.html"><span>← Previous</span><strong>1. What BitTorrent is and what this client will do</strong></a><a class="pager-card pager-next" href="chapter-03.html"><span>Next →</span><strong>3. Bits, bytes, hexadecimal, encodings, and Buffer</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

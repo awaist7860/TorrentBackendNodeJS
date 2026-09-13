@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="index.js">
+  <meta name="theme-color" content="#087ea4">
+  <title>14. Run the client safely · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-14.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link" href="chapter-04.html"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link active" href="chapter-14.html" aria-current="page"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part III · Downloading data</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">14</span><h1>14. Run the client safely</h1></div>
+      <p class="article-lead">index.js</p>
+    </header>
+          <div class="article-content"><h2 id="14-1-create-index-js">14.1 Create index.js</h2>
+<p><strong>index.js</strong></p>
+<div class="code-block code-numbered"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="code-line"><span class="k">import</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;node:path&#39;</span><span class="p">;</span></span>
+<span class="code-line"><span class="k">import</span><span class="w"> </span><span class="nx">process</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;node:process&#39;</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">download</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./src/download.js&#39;</span><span class="p">;</span></span>
+<span class="code-line"><span class="k">import</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">isSingleFileTorrent</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">openTorrent</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">torrentName</span><span class="p">,</span></span>
+<span class="code-line"><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./src/torrent-parser.js&#39;</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">torrentPath</span><span class="p">,</span><span class="w"> </span><span class="nx">requestedOutputPath</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mf">2</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">torrentPath</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Usage: node index.js &lt;file.torrent&gt; [output-file]&#39;</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="nx">process</span><span class="p">.</span><span class="nx">exitCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span></span>
+<span class="code-line"><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">torrent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">openTorrent</span><span class="p">(</span><span class="nx">torrentPath</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">isSingleFileTorrent</span><span class="p">(</span><span class="nx">torrent</span><span class="p">))</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span></span>
+<span class="code-line"><span class="w">        </span><span class="s1">&#39;This learning client supports single-file torrents only. &#39;</span><span class="w"> </span><span class="o">+</span></span>
+<span class="code-line"><span class="w">        </span><span class="s1">&#39;Multi-file support is explained in the improvements chapter.&#39;</span><span class="p">,</span></span>
+<span class="code-line"><span class="w">      </span><span class="p">);</span></span>
+<span class="code-line"><span class="w">    </span><span class="p">}</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">safeDefaultName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nx">torrentName</span><span class="p">(</span><span class="nx">torrent</span><span class="p">));</span></span>
+<span class="code-line"><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">outputPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">requestedOutputPath</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="nx">safeDefaultName</span><span class="p">;</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Torrent: </span><span class="si">${</span><span class="nx">torrentPath</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Saving to: </span><span class="si">${</span><span class="nx">outputPath</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span></span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">download</span><span class="p">(</span><span class="nx">torrent</span><span class="p">,</span><span class="w"> </span><span class="nx">outputPath</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span></span>
+<span class="code-line"><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="sb">`Download failed: </span><span class="si">${</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span></span>
+<span class="code-line"><span class="w">    </span><span class="nx">process</span><span class="p">.</span><span class="nx">exitCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span></span>
+<span class="code-line"><span class="w">  </span><span class="p">}</span></span>
+<span class="code-line"><span class="p">}</span></span></code></pre></div>
+<h2 id="14-2-command-line-arguments">14.2 Command-line arguments</h2>
+<p>process.argv contains the Node executable, script path, and then user arguments. slice(2) removes the first two. The first argument is the .torrent path. The optional second argument is the desired output path.</p>
+<h2 id="14-3-safe-default-file-name">14.3 Safe default file name</h2>
+<p>path.basename removes directory components from the name suggested inside the torrent. This prevents a metainfo name such as ../../something from choosing a path outside the current directory. A user-supplied output path is still honoured because the user explicitly typed it.</p>
+<h2 id="14-4-choose-a-suitable-legal-test-torrent">14.4 Choose a suitable legal test torrent</h2>
+<ul><li>It must be a BitTorrent v1 single-file torrent.</li><li>It must contain at least one udp:// tracker in announce or announce-list.</li><li>Use content you are authorised to download, such as an official open-source operating-system image or your own test data.</li><li>Start with a small file. Public swarms may have no reachable peers, even when your code is correct.</li></ul>
+<h2 id="14-5-run-it">14.5 Run it</h2>
+<p><strong>Direct Node command</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>node<span class="w"> </span>index.js<span class="w"> </span>path/to/example.torrent<span class="w"> </span>output.bin</code></pre></div>
+<p><strong>Equivalent npm script form</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>npm<span class="w"> </span>start<span class="w"> </span>--<span class="w"> </span>path/to/example.torrent<span class="w"> </span>output.bin</code></pre></div>
+<h2 id="14-6-expected-output">14.6 Expected output</h2>
+<p><strong>Illustrative output</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Terminal</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>Torrent:<span class="w"> </span>path/to/example.torrent
+Saving<span class="w"> </span>to:<span class="w"> </span>output.bin
+Tracker<span class="w"> </span>returned<span class="w"> </span><span class="m">18</span><span class="w"> </span>peer<span class="o">(</span>s<span class="o">)</span>.
+Progress:<span class="w"> </span><span class="m">42</span>%
+...
+Download<span class="w"> </span>complete.</code></pre></div>
+<p>Peer counts and progress timing vary. A tracker response does not guarantee that every listed peer is online, reachable, unchoking, or still participating.</p>
+<h2 id="14-7-check-the-result">14.7 Check the result</h2>
+<p>Compare the final file size with the torrent size. For a robust client, also verify every piece against info.pieces while downloading. If an official publisher supplies a whole-file checksum, verify that too, but remember that whole-file checksums are separate from the BitTorrent protocol.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-13.html"><span>← Previous</span><strong>13. Connect to peers, request blocks, and write the file</strong></a><a class="pager-card pager-next" href="chapter-15.html"><span>Next →</span><strong>15. Test the protocol code with node:test</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>
