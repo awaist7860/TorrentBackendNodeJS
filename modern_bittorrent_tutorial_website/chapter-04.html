@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bencoding is the compact data format used by BitTorrent metainfo files and some protocol extensions. It supports four value types: byte strings, integers, lists, and dictionaries. It is not…">
+  <meta name="theme-color" content="#087ea4">
+  <title>4. Bencoding and the anatomy of a .torrent file · Modern BitTorrent Client Tutorial</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>try{const t=localStorage.getItem('torrent-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}</script>
+  <script src="assets/js/search-index.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="chapter-04.html">
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-label="Open chapter navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="topbar-brand" href="index.html"><span class="brand-mark">BT</span><span>Modern BitTorrent</span></a>
+    <div class="topbar-actions">
+      <button class="search-button" type="button" aria-label="Search tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search</span><kbd>/</kbd></button>
+      <button class="icon-button theme-button" type="button" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg><svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"/></svg></button>
+    </div>
+  </header>
+  <div class="sidebar-scrim" hidden></div>
+  <aside class="site-sidebar" id="site-sidebar"><a class="sidebar-home" href="index.html"><span class="brand-mark">BT</span><span><strong>Modern BitTorrent</strong><small>Node.js tutorial</small></span></a><nav class="sidebar-nav" aria-label="Tutorial chapters"><div class="nav-group"><div class="nav-group-title">Start here</div><a class="chapter-link" href="about.html"><span class="chapter-badge">Start</span><span>About this guide</span></a><a class="chapter-link" href="contents.html"><span class="chapter-badge">≡</span><span>Contents</span></a></div><div class="nav-group"><div class="nav-group-title">Part I · Foundations</div><a class="chapter-link" href="chapter-01.html"><span class="chapter-badge">1</span><span>What BitTorrent is and what this client will do</span></a><a class="chapter-link" href="chapter-02.html"><span class="chapter-badge">2</span><span>Modern Node.js setup and project structure</span></a><a class="chapter-link" href="chapter-03.html"><span class="chapter-badge">3</span><span>Bits, bytes, hexadecimal, encodings, and Buffer</span></a><a class="chapter-link active" href="chapter-04.html" aria-current="page"><span class="chapter-badge">4</span><span>Bencoding and the anatomy of a .torrent file</span></a></div><div class="nav-group"><div class="nav-group-title">Part II · Discovering peers</div><a class="chapter-link" href="chapter-05.html"><span class="chapter-badge">5</span><span>Open and inspect a torrent</span></a><a class="chapter-link" href="chapter-06.html"><span class="chapter-badge">6</span><span>UDP, dgram, tracker URLs, and the two-request flow</span></a><a class="chapter-link" href="chapter-07.html"><span class="chapter-badge">7</span><span>Build and parse the UDP connect exchange</span></a><a class="chapter-link" href="chapter-08.html"><span class="chapter-badge">8</span><span>Build and parse the UDP announce exchange</span></a></div><div class="nav-group"><div class="nav-group-title">Part III · Downloading data</div><a class="chapter-link" href="chapter-09.html"><span class="chapter-badge">9</span><span>TCP, the peer-wire protocol, and the handshake</span></a><a class="chapter-link" href="chapter-10.html"><span class="chapter-badge">10</span><span>Peer message types and message builders</span></a><a class="chapter-link" href="chapter-11.html"><span class="chapter-badge">11</span><span>Reassemble complete messages from a TCP stream</span></a><a class="chapter-link" href="chapter-12.html"><span class="chapter-badge">12</span><span>Pieces, blocks, queues, and failed requests</span></a><a class="chapter-link" href="chapter-13.html"><span class="chapter-badge">13</span><span>Connect to peers, request blocks, and write the file</span></a><a class="chapter-link" href="chapter-14.html"><span class="chapter-badge">14</span><span>Run the client safely</span></a></div><div class="nav-group"><div class="nav-group-title">Part IV · Confidence and next steps</div><a class="chapter-link" href="chapter-15.html"><span class="chapter-badge">15</span><span>Test the protocol code with node:test</span></a><a class="chapter-link" href="chapter-16.html"><span class="chapter-badge">16</span><span>Common errors and troubleshooting</span></a><a class="chapter-link" href="chapter-17.html"><span class="chapter-badge">17</span><span>Improvements and a production-ready roadmap</span></a></div><div class="nav-group"><div class="nav-group-title">Appendices</div><a class="chapter-link" href="appendix-a.html"><span class="chapter-badge">A</span><span>Complete working source code</span></a><a class="chapter-link" href="appendix-b.html"><span class="chapter-badge">B</span><span>Protocol byte-layout cheat sheets</span></a><a class="chapter-link" href="appendix-c.html"><span class="chapter-badge">C</span><span>Glossary</span></a><a class="chapter-link" href="appendix-d.html"><span class="chapter-badge">D</span><span>Further reading and primary sources</span></a></div></nav></aside>
+  <div class="site-layout">
+      <main class="article-main">
+        <article class="article-shell">
+          <header class="article-header">
+      <div class="article-kicker"><span>Part I · Foundations</span><span>Updated for Node.js 24 LTS</span></div>
+      <div class="article-title-row"><span class="article-number">4</span><h1>4. Bencoding and the anatomy of a .torrent file</h1></div>
+      <p class="article-lead">Bencoding is the compact data format used by BitTorrent metainfo files and some protocol extensions. It supports four value types: byte strings, integers, lists, and dictionaries. It is not…</p>
+    </header>
+          <div class="article-content"><h2 id="4-1-what-bencoding-is">4.1 What bencoding is</h2>
+<p>Bencoding is the compact data format used by BitTorrent metainfo files and some protocol extensions. It supports four value types: byte strings, integers, lists, and dictionaries. It is not JSON, although decoded data can look similar in a console.</p>
+<div class="table-wrap"><table><thead><tr><th><strong>Type</strong></th><th><strong>Bencoded form</strong></th><th><strong>Decoded meaning</strong></th></tr></thead><tbody><tr><td>Byte string</td><td>4:spam</td><td>Four bytes containing spam.</td></tr><tr><td>Integer</td><td>i42e</td><td>The integer 42. i starts it and e ends it.</td></tr><tr><td>List</td><td>l4:spam4:eggse</td><td>A list containing spam and eggs.</td></tr><tr><td>Dictionary</td><td>d3:cow3:moo4:spam4:eggse</td><td>Keys and values: cow -&gt; moo, spam -&gt; eggs.</td></tr></tbody></table></div>
+<h2 id="4-2-byte-strings-are-length-prefixed">4.2 Byte strings are length-prefixed</h2>
+<p>In 4:spam, the 4 describes the number of bytes after the colon, not necessarily the number of visible characters. UTF-8 characters can use more than one byte, so protocol code must think in bytes.</p>
+<p><strong>Characters and bytes are not always the same count</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="nx">Buffer</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span><span class="w"> </span><span class="c1">// 5</span>
+<span class="nx">Buffer</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">(</span><span class="s1">&#39;£&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span><span class="w">     </span><span class="c1">// 2</span></code></pre></div>
+<h2 id="4-3-integers">4.3 Integers</h2>
+<p>An integer begins with i and ends with e. The digits between them are base-ten ASCII. Examples are i0e, i123e, and i-7e. Canonical bencoding does not use leading zeros, so i03e is invalid.</p>
+<h2 id="4-4-lists">4.4 Lists</h2>
+<p>A list begins with l and ends with e. Its elements are placed one after another. Because every value has a complete representation, a decoder knows exactly where one element finishes and the next begins.</p>
+<p><strong>A list containing the byte string spam and integer 42</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>l4:spami42ee
+^       ^
+list    end</code></pre></div>
+<h2 id="4-5-dictionaries">4.5 Dictionaries</h2>
+<p>A dictionary begins with d and ends with e. Keys are bencoded byte strings followed immediately by their values. Canonical dictionaries sort keys by their raw byte-string values. This ordering matters when calculating a v1 info hash.</p>
+<p><strong>Dictionary with name and length</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>d4:name9:puppy.jpg6:lengthi124234ee</code></pre></div>
+<h2 id="4-6-decode-and-encode-with-bencode-4-0-1">4.6 Decode and encode with bencode 4.0.1</h2>
+<p><strong>bencode package basics</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="k">import</span><span class="w"> </span><span class="nx">bencode</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;bencode&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">encoded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="s1">&#39;d3:cow3:moo4:spam4:eggse&#39;</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">decoded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">bencode</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">encoded</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">decoded</span><span class="p">.</span><span class="nx">cow</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">));</span><span class="w"> </span><span class="c1">// moo</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">again</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">bencode</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">decoded</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">again</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">));</span></code></pre></div>
+<p>The package returns byte strings as Buffer values. That is correct and important: not every byte string is human-readable text. The pieces field, for example, contains raw SHA-1 hashes and must not be decoded as UTF-8.</p>
+<h2 id="4-7-a-torrent-file-at-a-high-level">4.7 A torrent file at a high level</h2>
+<p><strong>Typical decoded single-file v1 torrent</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">Text</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code>{
+  announce: &lt;Buffer ...&gt;,
+  &#39;announce-list&#39;: [ ... ],
+  &#39;creation date&#39;: 1462355939,
+  &#39;created by&#39;: &lt;Buffer ...&gt;,
+  info: {
+    name: &lt;Buffer ...&gt;,
+    length: 124234,
+    &#39;piece length&#39;: 16384,
+    pieces: &lt;Buffer ...&gt;
+  }
+}</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th><strong>Field</strong></th><th><strong>Meaning</strong></th></tr></thead><tbody><tr><td>announce</td><td>Primary tracker URL.</td></tr><tr><td>announce-list</td><td>Optional tiers of alternative tracker URLs.</td></tr><tr><td>creation date</td><td>Optional Unix timestamp describing when the torrent was created.</td></tr><tr><td>created by</td><td>Optional name/version of the program that made the torrent.</td></tr><tr><td>info.name</td><td>Suggested file name for a single-file torrent, or top-level folder for a multi-file torrent.</td></tr><tr><td>info.length</td><td>File size in bytes for a single-file torrent.</td></tr><tr><td>info.files</td><td>Array of files for a multi-file torrent. This replaces info.length.</td></tr><tr><td>info.piece length</td><td>Normal number of bytes in each piece.</td></tr><tr><td>info.pieces</td><td>All expected v1 piece SHA-1 hashes joined together. Each hash is exactly 20 bytes.</td></tr></tbody></table></div>
+<h2 id="4-8-why-pieces-length-20-gives-the-piece-count">4.8 Why pieces.length / 20 gives the piece count</h2>
+<p>SHA-1 always returns 20 bytes. If info.pieces contains 400 bytes, it contains 400 / 20 = 20 piece hashes. The piece at index 0 uses bytes 0-19, index 1 uses bytes 20-39, and so on.</p>
+<h2 id="4-9-the-info-hash">4.9 The info hash</h2>
+<p>For a v1 torrent, the info hash is SHA-1 applied to the exact bencoded info dictionary. It identifies the torrent when speaking to a tracker or peer. It is not the hash of the downloaded file as one whole object.</p>
+<p><strong>Simple educational calculation</strong></p>
+<div class="code-block"><div class="code-toolbar"><span class="code-language">JavaScript</span><button class="copy-code" type="button" aria-label="Copy code">Copy</button></div><pre><code><span class="kd">const</span><span class="w"> </span><span class="nx">encodedInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">bencode</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">torrent</span><span class="p">.</span><span class="nx">info</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="s1">&#39;sha1&#39;</span><span class="p">).</span><span class="nx">update</span><span class="p">(</span><span class="nx">encodedInfo</span><span class="p">).</span><span class="nx">digest</span><span class="p">();</span></code></pre></div>
+<aside class="callout callout-info"><div class="callout-icon" aria-hidden="true">i</div><div><div class="callout-title"><strong>A subtle production detail</strong></div><p>The safest production parser hashes the exact raw byte slice occupied by the info dictionary in the original .torrent file. Decode-then-re-encode works for normal canonical torrents, which is what this guide assumes, but a non-canonical file could re-encode differently.</p></div></aside>
+<h2 id="4-10-single-file-versus-multi-file-torrents">4.10 Single-file versus multi-file torrents</h2>
+<p>A single-file torrent has info.length. A multi-file torrent has info.files, where each item contains a length and path components. The bytes still form one continuous logical stream for piece hashing. Supporting multiple output files therefore requires mapping stream offsets across file boundaries.</p></div>
+          <nav class="chapter-pager" aria-label="Chapter navigation"><a class="pager-card pager-prev" href="chapter-03.html"><span>← Previous</span><strong>3. Bits, bytes, hexadecimal, encodings, and Buffer</strong></a><a class="pager-card pager-next" href="chapter-05.html"><span>Next →</span><strong>5. Open and inspect a torrent</strong></a></nav>
+        </article>
+      </main>
+      <aside class="page-toc" aria-label="On this page"><div class="page-toc-inner"><div class="page-toc-title">On this page</div><nav id="page-toc-list"></nav></div></aside>
+    </div>
+  <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+  <div class="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <div class="search-panel-head"><div><span class="eyebrow">Search all chapters</span><h2 id="search-title">Find a topic or code term</h2></div><button class="icon-button close-search" type="button" aria-label="Close search">×</button></div>
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" autocomplete="off" placeholder="Try “Buffer”, “tracker”, or “handshake”"></label>
+      <div class="search-help">Press <kbd>Enter</kbd> to open the first result · <kbd>Esc</kbd> to close</div>
+      <div class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+</body>
+</html>

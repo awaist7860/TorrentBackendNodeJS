@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Node.js BitTorrent Tutorial</title>
+  <meta name="description" content="A beginner-friendly modern Node.js BitTorrent tutorial using ES modules, bencode@4, and Node.js 22+." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">BT</div>
+      <div>
+        <strong>Node Torrent</strong>
+        <span>Modern Tutorial</span>
+      </div>
+    </div>
+
+    <label class="search-label" for="searchInput">Search guide</label>
+    <input id="searchInput" class="search" type="search" placeholder="Search chapters..." />
+
+    <nav class="nav" id="nav">
+      <a href="#overview">Overview</a>
+      <a href="#prerequisites">1. Prerequisites</a>
+      <a href="#project-setup">2. Project setup</a>
+      <a href="#modern-change">3. Modern bencode change</a>
+      <a href="#parser">4. torrent-parser.js</a>
+      <a href="#cli">5. index.js CLI</a>
+      <a href="#run">6. Run it</a>
+      <a href="#how-it-works">7. How it works</a>
+      <a href="#troubleshooting">8. Troubleshooting</a>
+      <a href="#next-steps">9. Next steps</a>
+      <a href="#tracker">10. HTTP tracker skeleton</a>
+      <a href="#checklist">11. Final checklist</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <section class="hero section" id="overview">
+      <div class="eyebrow">Updated for Node.js 22+ · ES Modules · bencode@4</div>
+      <h1>Modern Node.js BitTorrent Tutorial</h1>
+      <p class="lead">A clean, beginner-friendly replacement for older BitTorrent tutorials that use outdated CommonJS code and older Buffer behaviour.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#project-setup">Start tutorial</a>
+        <a class="button" href="#parser">View main code</a>
+      </div>
+      <div class="cards">
+        <article class="card"><strong>Read .torrent files</strong><span>Decode bencoded metadata from disk.</span></article>
+        <article class="card"><strong>Fix Uint8Array issues</strong><span>Convert bytes safely using Buffer.from.</span></article>
+        <article class="card"><strong>Calculate info_hash</strong><span>Hash the bencoded info dictionary correctly.</span></article>
+        <article class="card"><strong>Plan the next build</strong><span>Trackers, peers, handshakes, and pieces.</span></article>
+      </div>
+      <p class="notice">Only use this project with legal torrents, public-domain files, Linux ISOs, or files you own.</p>
+    </section>
+
+    <section class="section" id="prerequisites">
+      <h2>1. Prerequisites</h2>
+      <p>Install Node.js 22 LTS or newer. You also need npm and a <code>.torrent</code> file, for example <code>puppy.torrent</code>, in your project folder.</p>
+      <pre><code>node -v
+npm -v</code></pre>
+      <p>Recommended folder layout:</p>
+      <pre><code>allen-torrent/
+  package.json
+  puppy.torrent
+  src/
+    index.js
+    torrent-parser.js</code></pre>
+    </section>
+
+    <section class="section" id="project-setup">
+      <h2>2. Create the project</h2>
+      <pre><code>mkdir allen-torrent
+cd allen-torrent
+npm init -y
+npm install bencode</code></pre>
+      <p>Replace your <code>package.json</code> with this modern version. The important part is <code>"type": "module"</code>.</p>
+      <pre><code>{
+  "name": "allen-torrent",
+  "version": "1.0.0",
+  "description": "A BitTorrent client for educational purposes",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js puppy.torrent",
+    "parse": "node src/index.js"
+  },
+  "dependencies": {
+    "bencode": "^4.0.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}</code></pre>
+    </section>
+
+    <section class="section" id="modern-change">
+      <h2>3. The important modern Node/bencode change</h2>
+      <p>Older tutorials may use <code>torrent.announce.toString('utf8')</code>. With <code>bencode@4</code>, decoded byte strings are often <code>Uint8Array</code> values. Calling <code>.toString()</code> directly on a <code>Uint8Array</code> gives comma-separated numbers, not text.</p>
+      <pre><code>// Wrong with bencode@4 decoded Uint8Array values:
+torrent.announce.toString('utf8')
+
+// Correct:
+Buffer.from(torrent.announce).toString('utf8')</code></pre>
+    </section>
+
+    <section class="section" id="parser">
+      <h2>4. Create <code>src/torrent-parser.js</code></h2>
+      <p>This file reads, decodes, and normalises the torrent metadata. It does not download anything yet.</p>
+      <pre><code>import fs from 'node:fs';
+import crypto from 'node:crypto';
+import bencode from 'bencode';
+import { Buffer } from 'node:buffer';
+
+export function openTorrent(torrentPath) {
+  const torrentFile = fs.readFileSync(torrentPath);
+  return bencode.decode(torrentFile);
+}
+
+export function bytesToString(value) {
+  if (value === undefined || value === null) return '';
+  return Buffer.from(value).toString('utf8');
+}
+
+export function bytesToHex(value) {
+  return Buffer.from(value).toString('hex');
+}
+
+export function size(torrent) {
+  const info = torrent.info;
+
+  if (info.length !== undefined) {
+    return Number(info.length);
+  }
+
+  if (Array.isArray(info.files)) {
+    return info.files.reduce((total, file) => total + Number(file.length), 0);
+  }
+
+  throw new Error('Invalid torrent: expected info.length or info.files');
+}
+
+export function torrentName(torrent) {
+  return bytesToString(torrent.info.name);
+}
+
+export function announceUrl(torrent) {
+  return bytesToString(torrent.announce);
+}
+
+export function infoHash(torrent) {
+  const encodedInfo = bencode.encode(torrent.info);
+  return crypto.createHash('sha1').update(encodedInfo).digest();
+}
+
+export function infoHashHex(torrent) {
+  return infoHash(torrent).toString('hex');
+}
+
+export function pieceLength(torrent) {
+  return Number(torrent.info['piece length']);
+}
+
+export function pieces(torrent) {
+  const piecesBuffer = Buffer.from(torrent.info.pieces);
+  const hashes = [];
+
+  for (let offset = 0; offset &lt; piecesBuffer.length; offset += 20) {
+    hashes.push(piecesBuffer.subarray(offset, offset + 20));
+  }
+
+  return hashes;
+}
+
+export function files(torrent) {
+  const info = torrent.info;
+
+  if (info.length !== undefined) {
+    return [
+      {
+        path: torrentName(torrent),
+        length: Number(info.length)
+      }
+    ];
+  }
+
+  return info.files.map((file) =&gt; ({
+    path: file.path.map(bytesToString).join('/'),
+    length: Number(file.length)
+  }));
+}
+
+function percentEncodeBytes(value) {
+  return Array.from(Buffer.from(value))
+    .map((byte) =&gt; `%${byte.toString(16).padStart(2, '0')}`)
+    .join('');
+}
+
+export function buildHttpTrackerUrl(torrent, peerId, port = 6881) {
+  const announce = announceUrl(torrent);
+
+  if (!announce.startsWith('http://') &amp;&amp; !announce.startsWith('https://')) {
+    throw new Error(`This helper only supports HTTP/HTTPS trackers. Tracker was: ${announce}`);
+  }
+
+  const params = [
+    ['info_hash', percentEncodeBytes(infoHash(torrent))],
+    ['peer_id', percentEncodeBytes(peerId)],
+    ['port', String(port)],
+    ['uploaded', '0'],
+    ['downloaded', '0'],
+    ['left', String(size(torrent))],
+    ['compact', '1'],
+    ['event', 'started']
+  ];
+
+  const query = params.map(([key, value]) =&gt; `${key}=${value}`).join('&amp;');
+  const separator = announce.includes('?') ? '&amp;' : '?';
+
+  return `${announce}${separator}${query}`;
+}
+
+export function createPeerId() {
+  const prefix = Buffer.from('-AT0001-');
+  const random = crypto.randomBytes(12);
+  return Buffer.concat([prefix, random]);
+}</code></pre>
+    </section>
+
+    <section class="section" id="cli">
+      <h2>5. Create <code>src/index.js</code></h2>
+      <p>This is the command-line entry point. It prints torrent metadata and the first few piece hashes.</p>
+      <pre><code>import {
+  openTorrent,
+  announceUrl,
+  torrentName,
+  size,
+  pieceLength,
+  pieces,
+  files,
+  infoHashHex,
+  createPeerId,
+  buildHttpTrackerUrl
+} from './torrent-parser.js';
+
+const torrentPath = process.argv[2];
+
+if (!torrentPath) {
+  console.error('Usage: npm run parse -- path/to/file.torrent');
+  process.exit(1);
+}
+
+const torrent = openTorrent(torrentPath);
+const pieceHashes = pieces(torrent);
+
+console.log('Torrent metadata');
+console.log('----------------');
+console.log('Name:          ', torrentName(torrent));
+console.log('Announce:      ', announceUrl(torrent));
+console.log('Total size:    ', `${size(torrent).toLocaleString()} bytes`);
+console.log('Piece length:  ', `${pieceLength(torrent).toLocaleString()} bytes`);
+console.log('Piece count:   ', pieceHashes.length);
+console.log('Info hash hex: ', infoHashHex(torrent));
+
+console.log('\nFiles');
+console.log('-----');
+for (const file of files(torrent)) {
+  console.log(`${file.length.toLocaleString().padStart(12)} bytes  ${file.path}`);
+}
+
+console.log('\nFirst 5 piece hashes');
+console.log('--------------------');
+for (const hash of pieceHashes.slice(0, 5)) {
+  console.log(hash.toString('hex'));
+}
+
+try {
+  const peerId = createPeerId();
+  const trackerUrl = buildHttpTrackerUrl(torrent, peerId);
+  console.log('\nExample HTTP tracker URL');
+  console.log('------------------------');
+  console.log(trackerUrl.toString());
+} catch (error) {
+  console.log('\nTracker URL note');
+  console.log('----------------');
+  console.log(error.message);
+}</code></pre>
+    </section>
+
+    <section class="section" id="run">
+      <h2>6. Run it</h2>
+      <pre><code>npm run parse -- puppy.torrent</code></pre>
+      <p>Expected style of output:</p>
+      <pre><code>Torrent metadata
+----------------
+Name:           puppy.jpg
+Announce:       udp://tracker.example.com:6969/announce
+Total size:     124,234 bytes
+Piece length:   16,384 bytes
+Piece count:    8
+Info hash hex:  0123abcd...</code></pre>
+      <p>If your tracker starts with <code>udp://</code>, the metadata parser still works. UDP trackers use a different binary protocol.</p>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <h2>7. How the code works</h2>
+      <div class="explain-grid">
+        <article><h3>openTorrent()</h3><p>Reads the file as raw bytes and decodes bencode into a JavaScript object.</p></article>
+        <article><h3>infoHash()</h3><p>Hashes only the bencoded <code>info</code> dictionary. Do not hash JSON or the full file.</p></article>
+        <article><h3>pieces()</h3><p>Splits the long <code>pieces</code> byte string into 20-byte SHA-1 hashes.</p></article>
+        <article><h3>files()</h3><p>Returns one consistent array for both single-file and multi-file torrents.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="troubleshooting">
+      <h2>8. Troubleshooting common errors</h2>
+      <details open><summary>bencode does not provide an export named decode</summary><pre><code>import bencode from 'bencode';
+const torrent = bencode.decode(data);</code></pre></details>
+      <details><summary>announce prints numbers instead of a URL</summary><pre><code>Buffer.from(torrent.announce).toString('utf8')</code></pre></details>
+      <details><summary>require is not defined in ES module scope</summary><pre><code>import fs from 'node:fs';</code></pre></details>
+      <details><summary>Cannot find module src/torrent-parser.js</summary><p>Check folder names and include the <code>.js</code> extension in your import path.</p></details>
+    </section>
+
+    <section class="section" id="next-steps">
+      <h2>9. What to build next</h2>
+      <ol class="timeline">
+        <li><strong>HTTP tracker request:</strong> use <code>fetch(trackerUrl)</code>, decode the response, and parse compact peers.</li>
+        <li><strong>UDP tracker support:</strong> implement BEP 15 connect and announce packets with <code>dgram</code>.</li>
+        <li><strong>Peer handshake:</strong> open a TCP socket and send protocol string, reserved bytes, info_hash, and peer_id.</li>
+        <li><strong>Peer messages:</strong> parse choke, unchoke, interested, bitfield, request, and piece messages.</li>
+        <li><strong>Piece verification:</strong> SHA-1 hash downloaded pieces and compare them against <code>pieces()</code>.</li>
+      </ol>
+    </section>
+
+    <section class="section" id="tracker">
+      <h2>10. Optional: HTTP tracker fetch skeleton</h2>
+      <p>Use this only for HTTP/HTTPS trackers. It will not work for <code>udp://</code> trackers.</p>
+      <pre><code>import bencode from 'bencode';
+import { Buffer } from 'node:buffer';
+import { openTorrent, createPeerId, buildHttpTrackerUrl } from './torrent-parser.js';
+
+function parseCompactPeers(peersValue) {
+  const peers = Buffer.from(peersValue);
+  const result = [];
+
+  for (let i = 0; i &lt; peers.length; i += 6) {
+    const ip = `${peers[i]}.${peers[i + 1]}.${peers[i + 2]}.${peers[i + 3]}`;
+    const port = peers.readUInt16BE(i + 4);
+    result.push({ ip, port });
+  }
+
+  return result;
+}
+
+const torrent = openTorrent(process.argv[2]);
+const peerId = createPeerId();
+const trackerUrl = buildHttpTrackerUrl(torrent, peerId);
+
+const response = await fetch(trackerUrl);
+const responseBytes = new Uint8Array(await response.arrayBuffer());
+const trackerResponse = bencode.decode(responseBytes);
+
+if (trackerResponse['failure reason']) {
+  throw new Error(Buffer.from(trackerResponse['failure reason']).toString('utf8'));
+}
+
+console.log('Interval:', trackerResponse.interval);
+console.log('Peers:', parseCompactPeers(trackerResponse.peers));</code></pre>
+    </section>
+
+    <section class="section" id="checklist">
+      <h2>11. Final checklist</h2>
+      <ul class="checklist">
+        <li>Use <code>"type": "module"</code> in <code>package.json</code>.</li>
+        <li>Use <code>import</code> syntax, not <code>require</code>.</li>
+        <li>Import bencode as default: <code>import bencode from 'bencode'</code>.</li>
+        <li>Convert bencode byte strings with <code>Buffer.from(value).toString('utf8')</code>.</li>
+        <li>Hash <code>bencode.encode(torrent.info)</code>, not the whole file.</li>
+        <li>Split <code>torrent.info.pieces</code> into 20-byte chunks.</li>
+        <li>Handle single-file and multi-file torrents separately.</li>
+        <li>Treat <code>udp://</code> trackers separately from HTTP trackers.</li>
+      </ul>
+    </section>
+  </main>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>
